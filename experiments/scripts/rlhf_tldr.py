@@ -1,34 +1,24 @@
-import torch
-import time
-import wandb
-import datetime
 import argparse
+import datetime
 import logging
 import os
+import time
+
 import numpy as np
-import re
+import torch
+from datasets import load_dataset
+from dotenv import load_dotenv
+from peft import AutoPeftModelForSequenceClassification, LoraConfig
 from pkg_resources import resource_filename
 from tqdm import tqdm
-from transformers import (
-    AutoTokenizer,
-    AutoModelForSequenceClassification,
-    BitsAndBytesConfig,
-    set_seed,
-)
-from peft import LoraConfig, AutoPeftModelForSequenceClassification
-from datasets import load_dataset
-import sys
-
-from abcrl.rl.ppo import PPOTrainerABC
-from abcrl.attention.redistribution import (
-    get_attention_distribution,
-    get_generator_attention_distribution,
-)
-from trl import (
-    PPOConfig,
-    AutoModelForCausalLMWithValueHead,
-)
+from transformers import AutoTokenizer, BitsAndBytesConfig, set_seed
+from trl import AutoModelForCausalLMWithValueHead, PPOConfig
 from trl.core import LengthSampler
+
+import wandb
+from abcrl.attention.redistribution import (
+    get_attention_distribution, get_generator_attention_distribution)
+from abcrl.rl.ppo import PPOTrainerABC
 
 
 def build_tldr_dataset(
@@ -51,7 +41,7 @@ def build_tldr_dataset(
     ds = load_dataset(dataset_name, "comparisons", split="train")
 
     def tokenize(sample):
-        choice, post, sum1, sum2 = (
+        _, post, _, _ = (
             sample["choice"],
             sample["info"]["post"],
             sample["summaries"][0]["text"],
@@ -137,7 +127,10 @@ def main(
     logger.info(f"Dataset length: {len(dataset)}")
     logger.debug(dataset[0])
 
-    wandb.init(**{"project": project_name, "name": run_name, "entity": "alex-abc"})
+    load_dotenv()
+    wandb_entity = os.getenv("WANDB_ENTITY")
+
+    wandb.init(**{"project": project_name, "name": run_name, "entity": f"{wandb_entity}"})
 
     lora_config = LoraConfig(
         r=lora_rank,
@@ -199,7 +192,7 @@ def main(
 
     output_min_length = min_generation
     output_max_length = max_generation
-    output_length_sampler = LengthSampler(output_min_length, output_max_length)
+    LengthSampler(output_min_length, output_max_length)
 
     local_res = []
     generation_kwargs = {

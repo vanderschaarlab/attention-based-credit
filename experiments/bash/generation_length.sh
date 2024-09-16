@@ -1,6 +1,8 @@
 #!/bin/bash
 
-SCRIPT="/home/ajc340/rlhf-abc/experiments/scripts/rlhf_imdb.py" 
+# Get the directory of the current script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+SCRIPT="$SCRIPT_DIR/../scripts/rlhf_imdb.py"
 
 for i in {1..10}; do
     # Run each method 10 times

@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer, LlamaTokenizer
+from transformers import AutoTokenizer
 
 
 def check_special_tokens(tokenizer1, tokenizer2):

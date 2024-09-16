@@ -1,13 +1,9 @@
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    TrainingArguments,
-    BitsAndBytesConfig,
-)
-from datasets import load_dataset
-from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
-from peft import LoraConfig, AutoPeftModelForCausalLM, get_peft_model
 import torch
+from datasets import load_dataset
+from peft import LoraConfig, get_peft_model
+from transformers import (AutoModelForCausalLM, AutoTokenizer,
+                          BitsAndBytesConfig, TrainingArguments)
+from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 dataset = load_dataset("openai/summarize_from_feedback", "comparisons", split="train")
 

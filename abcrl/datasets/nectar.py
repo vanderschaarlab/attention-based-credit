@@ -1,6 +1,7 @@
 import re
+
 from datasets import load_dataset
-from transformers import LlamaTokenizer, AutoTokenizer
+from transformers import AutoTokenizer, LlamaTokenizer
 
 
 def build_nectar_dataset(
@@ -21,7 +22,7 @@ def build_nectar_dataset(
     prompt = "Below is an instruction from a Human that describes a task. Write a response as the Assistant that appropriately completes the request."
     try:
         tokenizer = LlamaTokenizer.from_pretrained(config.model_name, use_fast=False)
-    except Exception as e:
+    except Exception:
         tokenizer = AutoTokenizer.from_pretrained(config.model_name, use_fast=False)
 
     ds = load_dataset(dataset_name, split="train")

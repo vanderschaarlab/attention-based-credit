@@ -1,12 +1,14 @@
-import wandb
 import argparse
+import os
 import pickle
-import numpy as np
+
 import matplotlib.pyplot as plt
-import matplotlib.patheffects as path_effects
+import numpy as np
+from dotenv import load_dotenv
 from matplotlib.ticker import AutoMinorLocator
 from pkg_resources import resource_filename
 
+import wandb
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--use_wandb", action="store_true")
@@ -29,7 +31,7 @@ plt.rcParams["axes.grid"] = True
 plt.rcParams["grid.alpha"] = 0.2
 plt.rcParams["grid.linestyle"] = ":"
 plt.rcParams["grid.linewidth"] = 2
-plt.rcParams["font.family"] = "Futura"
+plt.rcParams["font.family"] = "DejaVu Sans"
 
 graph_colour = "black"
 
@@ -117,11 +119,12 @@ def plot_results(res, save=False):
         plt.savefig(f"{BASE_PATH}/results/figures/beta_sweep.png", bbox_inches="tight")
     # plt.show()
 
-
+load_dotenv()
 api = wandb.Api()
+wandb_entity = os.getenv("WANDB_ENTITY")
 
 if args.use_wandb:
-    runs = api.runs("alex-abc/beta_sweep_seeded")
+    runs = api.runs(f"{wandb_entity}/beta_sweep_seeded")
 
     res = {}
     for run in runs:
@@ -137,7 +140,7 @@ else:
     try:
         with open(f"{BASE_PATH}/results/numerics/beta_sweep.pkl", "rb") as f:
             res = pickle.load(f)
-    except:
+    except FileNotFoundError:
         print(
             "No local results found. Please run with --use_wandb to fetch results from wandb."
         )

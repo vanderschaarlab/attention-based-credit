@@ -1,7 +1,8 @@
 import re
-from datasets import load_dataset
-from transformers import LlamaTokenizer, AutoTokenizer
+
 import torch.utils.data as data
+from datasets import load_dataset
+from transformers import AutoTokenizer, LlamaTokenizer
 from trl import PPOConfig
 
 
@@ -30,7 +31,7 @@ def build_anthropic_dataset(
     ds = ds.filter(lambda x: x["chosen"].count("Human:") == 1, batched=False)
     try:
         tokenizer = LlamaTokenizer.from_pretrained(config.model_name, use_fast=False)
-    except Exception as e:
+    except Exception:
         tokenizer = AutoTokenizer.from_pretrained(config.model_name, use_fast=False)
 
     def tokenize(sample):

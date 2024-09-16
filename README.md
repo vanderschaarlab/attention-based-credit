@@ -30,12 +30,12 @@ pip install -e .
 
 The PPO implementation used is a small update to the [TRL](https://github.com/huggingface/trl) implementation, which it inherits from. Thus, please pay attention to the version used as TRL is very actively updated and breaking changes may have been introduced.
 
-Scripts used to run the algorithms are in `experiments/scripts`, and each experiment in the paper has essentially its own corresponding script in `experiments/bash` which runs the necessary scripts to compile all the results, for example, to reproduce the experiment in Figure 3 you run:
+Scripts used to run the algorithms are in `experiments/scripts`, and each experiment in the paper has essentially its own corresponding script in `experiments/bash` which runs the necessary scripts to compile all the results, for example, to reproduce the experiment in Figure 3, navigate to the root directory and run:
 
 ```shell
 bash experiments/bash/IMDb_base.sh
 ```
-Note: You will need to update some paths in the bash scripts as well as the WandB entities for experiment tracking and result loading. The experiments were run on a machine with a single NVIDIA A6000 Ada card with 48GB VRAM, so any changes in setup may also require attention.
+Note: The WandB entities for experiment tracking and result loading needs setting in the .env file in the root directory. The experiments were run on a machine with a single NVIDIA A6000 Ada card with 48GB VRAM, so any changes in setup may also require attention.
 
 You can then generate the results and plots using:
 ```shell
@@ -43,7 +43,7 @@ python experiments/plotting/IMDb.py
 ```
 Note: These can actually already be run without re-doing the experiments as I've saved cached results in `results/numerics` that the plotting scripts can access if `--use_wandb false`.
 
-### Citing 
+### Citing
 
 If you use this software please cite as follows:
 
