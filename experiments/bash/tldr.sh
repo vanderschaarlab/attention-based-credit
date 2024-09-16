@@ -1,6 +1,8 @@
 #!/bin/bash
 
-SCRIPT="/home/ajc340/rlhf-abc/experiments/scripts/rlhf_tldr.py" 
+# Get the directory of the current script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+SCRIPT="$SCRIPT_DIR/../scripts/rlhf_tldr.py"
 
 for i in {1..5}; do
     for method in rlhf abc uniform; do

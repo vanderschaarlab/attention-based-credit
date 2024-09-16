@@ -1,9 +1,11 @@
-import os
-import torch
-from torch import nn
 import math
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+import os
+
+import torch
 from huggingface_hub import snapshot_download
+from torch import nn
+from transformers import (AutoModelForCausalLM, AutoTokenizer,
+                          BitsAndBytesConfig)
 
 """
 Code mostly from https://huggingface.co/berkeley-nest/Starling-RM-7B-alpha
@@ -134,7 +136,7 @@ if __name__ == "__main__":
 
     texts = [
         "<s>[INST] Hello? </s> [/INST] Hi, how can I help you?</s>",
-        "\n\nHuman: 0.002 = 1000 \n1 = x?\n\nAssistant: To find the value of x, we can set up a proportion using the given information:\n\n0.002/1000 = 1/x\n\nTo solve for x, we can cross multiply:\n\n0.002 * x = 1000 * 1\n\n0.002x = 1000\n\nDividing both sides by 0.002:\n\nx = 1000 / 0.002\n\nx = 500,000\n\nTherefore, 1 is equal to 500,000 in this proportion.",
+        "\n\nHuman: 0.002 = 1000 \n1 = x?\n\nAssistant: To find the value of x, we can set up a proportion using the given information:\n\n0.002/1000 = 1/x\n\nTo solve for x, we can cross multiply:\n\n0.002 * x = 1000 * 1\n\n0.002x = 1000\n\nDividing both sides by 0.002:\n\nx = 1000 / 0.002\n\nx = 500,000\n\nTherefore, 1 is equal to 500,000 in this proportion.", #  noqa: E501
     ]
 
     inputs = reward_tokenizer(

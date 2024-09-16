@@ -1,30 +1,24 @@
-import torch
-import wandb
-import datetime
 import argparse
+import datetime
 import logging
 import os
-import numpy as np
 import time
+
+import numpy as np
+import torch
+from dotenv import load_dotenv
+from peft import LoraConfig
 from pkg_resources import resource_filename
 from tqdm import tqdm
-from transformers import (
-    LlamaTokenizer,
-    AutoModelForSequenceClassification,
-    BitsAndBytesConfig,
-    set_seed,
-)
-from peft import LoraConfig
-from abcrl.rl.ppo import PPOTrainerABC
+from transformers import (AutoModelForSequenceClassification,
+                          BitsAndBytesConfig, LlamaTokenizer, set_seed)
+from trl import AutoModelForCausalLMWithValueHead, PPOConfig
+
+import wandb
 from abcrl.attention.redistribution import (
-    get_attention_distribution,
-    get_generator_attention_distribution,
-)
+    get_attention_distribution, get_generator_attention_distribution)
 from abcrl.datasets import build_anthropic_dataset, collator
-from trl import (
-    PPOConfig,
-    AutoModelForCausalLMWithValueHead,
-)
+from abcrl.rl.ppo import PPOTrainerABC
 
 
 def main(
@@ -104,7 +98,10 @@ def main(
     logger.info(f"Dataset length: {len(dataset)}")
     logger.debug(dataset[0])
 
-    wandb.init(**{"project": project_name, "name": run_name, "entity": "alex-abc"})
+    load_dotenv()
+    wandb_entity = os.getenv("WANDB_ENTITY")
+
+    wandb.init(**{"project": project_name, "name": run_name, "entity": f"{wandb_entity}"})
 
     lora_config = LoraConfig(
         r=lora_rank,

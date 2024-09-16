@@ -1,12 +1,16 @@
-import wandb
 import argparse
+import os
 import pickle
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patheffects as path_effects
+
 import matplotlib.lines as mlines
+import matplotlib.patheffects as path_effects
+import matplotlib.pyplot as plt
+import numpy as np
+from dotenv import load_dotenv
 from matplotlib.ticker import AutoMinorLocator
 from pkg_resources import resource_filename
+
+import wandb
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--use_wandb", action="store_true")
@@ -29,7 +33,7 @@ plt.rcParams["axes.grid"] = True
 plt.rcParams["grid.alpha"] = 0.4
 plt.rcParams["grid.linestyle"] = ":"
 plt.rcParams["grid.linewidth"] = 2
-plt.rcParams["font.family"] = "Futura"
+plt.rcParams["font.family"] = "DejaVu Sans"
 
 graph_colour = "black"
 
@@ -217,11 +221,12 @@ def plot_results(res, save=False):
         plt.savefig(f"{BASE_PATH}/results/figures/IMDb.png", bbox_inches="tight")
     # plt.show()
 
-
+load_dotenv()
 api = wandb.Api()
+wandb_entity = os.getenv("WANDB_ENTITY")
 
 if args.use_wandb:
-    runs = api.runs("alex-abc/IMDb_seeded")
+    runs = api.runs(f"{wandb_entity}/IMDb_seeded")
 
     res = {}
     for run in runs:
@@ -237,7 +242,7 @@ else:
     try:
         with open(f"{BASE_PATH}/results/numerics/IMDb.pkl", "rb") as f:
             res = pickle.load(f)
-    except:
+    except FileNotFoundError:
         print(
             "No local results found. Please run with --use_wandb to fetch results from wandb."
         )

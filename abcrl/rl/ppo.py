@@ -17,20 +17,14 @@
 # limitations under the License.
 
 import time
+import warnings
 from typing import List, Optional
 
 import numpy as np
 import torch
 from trl import PPOTrainer
-from trl.core import (
-    WANDB_PADDING,
-    PPODecorators,
-    convert_to_scalar,
-    logprobs_from_logits,
-    stack_dicts,
-    stats_to_np,
-)
-import warnings
+from trl.core import (WANDB_PADDING, PPODecorators, convert_to_scalar,
+                      logprobs_from_logits, stack_dicts, stats_to_np)
 
 
 class PPOTrainerABC(PPOTrainer):

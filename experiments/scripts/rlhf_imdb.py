@@ -1,17 +1,20 @@
-import torch
-import wandb
-import datetime
 import argparse
-from tqdm import tqdm
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, set_seed
+import datetime
+import os
+
+import torch
 from datasets import load_dataset
-from abcrl.rl.ppo import PPOTrainerABC
-from abcrl.attention.redistribution import (
-    get_attention_distribution,
-    get_generator_attention_distribution,
-)
-from trl import PPOConfig, AutoModelForCausalLMWithValueHead
+from dotenv import load_dotenv
+from tqdm import tqdm
+from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
+                          set_seed)
+from trl import AutoModelForCausalLMWithValueHead, PPOConfig
 from trl.core import LengthSampler
+
+import wandb
+from abcrl.attention.redistribution import (
+    get_attention_distribution, get_generator_attention_distribution)
+from abcrl.rl.ppo import PPOTrainerABC
 
 
 def build_dataset(
@@ -75,7 +78,10 @@ def main(
 
     print(f"Run name: {run_name}")
 
-    wandb.init(**{"project": project_name, "name": run_name, "entity": "alex-abc"})
+    load_dotenv()
+    wandb_entity = os.getenv("WANDB_ENTITY")
+
+    wandb.init(**{"project": project_name, "name": run_name, "entity": f"{wandb_entity}"})
 
     config = PPOConfig(
         model_name="lvwerra/gpt2-imdb",

@@ -1,14 +1,8 @@
-from datasets import load_dataset, load_metric
-from transformers import (
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-    GPT2Tokenizer,
-    TrainingArguments,
-    Trainer,
-    DataCollatorWithPadding,
-    set_seed,
-)
 import numpy as np
+from datasets import load_dataset, load_metric
+from transformers import (AutoModelForSequenceClassification,
+                          DataCollatorWithPadding, GPT2Tokenizer, Trainer,
+                          TrainingArguments, set_seed)
 
 # from peft import prepare_model_for_kbit_training
 # from peft import LoraConfig, get_peft_model
